@@ -1,0 +1,24 @@
+name: Git Lab CI
+on:
+  push:
+  pull_request:
+
+jobs:
+  backend-and-git:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install test runner
+        run: python -m pip install pytest
+      - name: Test multiplayer backend and real git
+        run: python -m pytest -q tests/test_arena.py tests/test_real_git.py
+      - name: Bash Git demo with real merge conflict
+        run: bash demo-real.sh --auto
+      - name: Check browser scripts syntax
+        run: |
+          for file in app.js arena.js join.js masterclass.js real-git.js; do
+            node --check "$file"
+          done
