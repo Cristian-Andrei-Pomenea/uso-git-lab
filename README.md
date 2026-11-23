@@ -84,3 +84,9 @@ bash demo-real.sh --auto
 Testele de interfață pentru simulator necesită **Playwright + Chromium instalat**; backend-ul, securitatea API și real Git au teste fără browser. CI rulează verificările care nu necesită browser instalat. JavaScript poate fi verificat cu `node --check app.js` etc., dacă ai Node.
 
 Componentele sunt cu funcții distincte: simulatorul nu execută comenzi, sandboxul Git real nu acceptă shell arbitrar, iar serverul ARENA servește exclusiv asset-uri allowlisted.
+
+### Publicarea quiz-ului prin internet (opțional)
+
+Vezi [DEPLOY-ONLINE.md](DEPLOY-ONLINE.md) pentru configurarea în Render din `render.yaml`, inclusiv HTTPS, QR public, variabila secretă `ARENA_ADMIN_KEY` și limitele serviciilor gratuite. **Crearea serviciului Render este un pas separat de publicarea codului pe GitHub.**
+
+Testele end-to-end pentru browser folosesc 3 contexte Chromium independente și un server Python autentic, cu adaptor de transport pentru mediile de test care blochează navigarea HTTP. Workflow-ul GitHub Actions rulează și această suită după instalarea Playwright.
