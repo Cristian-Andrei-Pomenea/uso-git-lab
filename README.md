@@ -73,11 +73,29 @@ Vezi **[MASTERCLASS-PROFESOR.md](MASTERCLASS-PROFESOR.md)** pentru trei variante
 
 Materialul OCW prezintă adesea `master`; această versiune folosește `main` (ambele sunt doar nume de branch).
 
+## Dacă serverul nu pornește după `git clone`
+
+O versiune inițială a omis din commit directoarele `vendor/qrcode/image/` și
+`vendor/qrcode/compat/`, deși acestea existau în mediul de dezvoltare.
+Eroarea era `ModuleNotFoundError: No module named 'qrcode.image'`.
+A fost corectată prin publicarea modulelor lipsă. Actualizează checkout-ul:
+
+```bash
+cd ~/projects/uso-git-lab
+git pull --ff-only origin main
+python3 -S -c 'import live_quiz_server; print("QR vendor import OK")'
+python3 live_quiz_server.py --host 0.0.0.0 --port 8798
+```
+
+`python3 -S` exclude pachetele din `site-packages`, astfel verifică faptul că
+biblioteca QR inclusă în repository este completă. Testul automat
+`tests/test_packaging_smoke.py` verifică și că submodulele QR sunt urmărite de Git.
+
 ## Calitate și teste
 
 ```bash
 python3 -m pip install pytest  # doar pentru teste, nu pentru rularea serverelor
-python3 -m pytest -q tests/test_arena.py tests/test_demo.py tests/test_real_git.py
+python3 -m pytest -q tests/test_packaging_smoke.py tests/test_arena.py tests/test_demo.py tests/test_real_git.py
 bash demo-real.sh --auto
 ```
 
