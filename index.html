@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#090b18">
+  <meta name="description" content="Git//LAB: simulare interactivă offline pentru laboratorul USO 08 — Git și GitHub.">
+  <title>GIT//LAB 08 · The Git Universe</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="ambient ambient-a"></div><div class="ambient ambient-b"></div><div class="grid-overlay" aria-hidden="true"></div>
+<div id="app" class="app-shell">
+  <header class="topbar">
+    <div class="brand"><span class="brand-symbol">⌁</span><div><div class="brand-name">GIT<span>//</span>LAB<span class="brand-eight">08</span></div><div class="brand-sub">UNIVERSUL VERSIONĂRII · USO</div></div></div>
+    <div class="topbar-center"><span class="live-dot"></span><span>SIMULATOR LOCAL · 100% OFFLINE</span><span class="sep">/</span><span id="activeScenarioLabel">ACTUL I: PRIMUL COMMIT</span></div>
+    <div class="header-actions"><a href="masterclass.html" class="btn tiny ghost" title="Masterclass 45 minute">◈ MASTERCLASS</a><a href="/arena" class="btn tiny primary" title="Live multiplayer quiz">⚡ LIVE QUIZ</a><button class="btn tiny ghost" id="btnHelp" title="Comenzi acceptate (?)">? <span class="hide-small">AJUTOR</span></button><button class="btn tiny ghost" id="btnFullscreen" title="Fullscreen">⛶ <span class="hide-small">FULLSCREEN</span></button><button class="btn tiny primary" id="btnReset" title="Resetează scenariul">↻ <span class="hide-small">RESET</span></button></div>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="hero-left"><div class="eyebrow"><span class="sparkle">✦</span> LABORATOR INTERACTIV / ANUL I / NIVEL 01—05</div>
+        <h1>Code evolves.<br><em>History survives.</em></h1>
+        <p>Înțelege Git <strong>văzând</strong> ce se întâmplă. Tastează comenzi, mută branch-uri, strică un merge, repară-l. Fără risc, fără cont, fără instalare.</p>
+        <div class="hero-chips"><span><i class="mini-dot cyan"></i> GRAF LIVE</span><span><i class="mini-dot pink"></i> TERMINAL INTERACTIV</span><span><i class="mini-dot lime"></i> MISSION MODE</span></div>
+      </div>
+      <div class="hero-right"><div class="orbit orbit-outer"></div><div class="orbit orbit-inner"></div><span class="planet planet-a"></span><span class="planet planet-b"></span><div class="center-mark">⌘</div><span class="orbit-label top">BRANCH</span><span class="orbit-label bottom">COMMIT</span></div>
+    </section>
+
+    <section class="scene-strip" aria-label="Alege scenariul"><div class="strip-title"><span>SCENARII</span><small>DEMO · MASTERCLASS · LIVE QUIZ</small></div>
+      <div class="scenes" id="scenes">
+        <button class="scene active" data-scenario="start"><span class="scene-index">01</span><span class="scene-name">First commit</span><span class="scene-duration">3 MIN</span></button>
+        <button class="scene" data-scenario="branch"><span class="scene-index">02</span><span class="scene-name">Parallel worlds</span><span class="scene-duration">3 MIN</span></button>
+        <button class="scene" data-scenario="pr"><span class="scene-index">03</span><span class="scene-name">Pull request</span><span class="scene-duration">3 MIN</span></button>
+        <button class="scene" data-scenario="conflict"><span class="scene-index">04</span><span class="scene-name">Merge disaster</span><span class="scene-duration">3 MIN</span></button>
+        <button class="scene scene-bonus" data-scenario="quiz"><span class="scene-index">★</span><span class="scene-name">Boss fight</span><span class="scene-duration">BONUS</span></button>
+      </div>
+    </section>
+
+    <div class="workspace">
+      <section class="card graph-card" aria-label="Vizualizarea istoricului Git">
+        <div class="card-top"><div><div class="overline">GIT OBSERVATORY <span class="signal">● LIVE</span></div><h2>Harta commit-urilor <span class="h2-small">/ GRAPH VIEW</span></h2></div><div class="top-right"><span class="key"><i class="mini-dot cyan"></i> MAIN</span><span class="key"><i class="mini-dot pink"></i> FEATURE</span><span class="key"><i class="mini-dot lime"></i> REMOTE</span></div></div>
+        <div class="graph-area"><div class="graph-watermark">HISTORY / HEAD / REFS</div><svg id="graph" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Graf commits și branch-uri"></svg><div class="graph-empty" id="graphEmpty" hidden><div class="empty-icon">◇</div><strong>Empty universe</strong><span>Primul commit va apărea aici.</span></div></div>
+        <div class="graph-footer"><div class="graph-counter"><span class="pulse-dot"></span> <strong id="commitCount">0</strong> COMMITS · <strong id="branchCount">1</strong> BRANCH-URI</div><div class="head-badge" id="headBadge">HEAD → main</div><button class="link-btn" id="btnShowLog">git log --graph --all ↗</button></div>
+      </section>
+
+      <aside class="card missions-card" aria-label="Misiunea activă">
+        <div class="card-top compact"><div><div class="overline">MISSION CONTROL</div><h2 id="missionSceneTitle">01 / Primul commit</h2></div><div class="level-tag">LVL <span id="missionLevel">01</span></div></div>
+        <div class="progress-track" aria-label="Progres misiuni"><div id="progressFill"></div></div><div class="progress-caption"><span id="progressLabel">0 / 4 PAȘI</span><span id="missionPercent">0%</span></div>
+        <div class="mission-content"><div class="mission-symbol" id="missionSymbol">⌁</div><div class="mission-step-num" id="missionStepNum">OBIECTIV 01</div><h3 id="missionTitle">Inspectează repository-ul</h3><p id="missionDescription">Ce vede Git înainte să faci primul commit?</p>
+          <div class="command-suggestion"><span class="prompt-symbol">$</span><code id="missionCommand">git status</code><button id="btnUseCommand" title="Copiază comanda în terminal">↗</button></div>
+          <button class="btn accent full" id="btnRunSuggestion">▶ EXECUTĂ COMANDA <span>↗</span></button><button class="btn subtle full" id="btnMissionAction" hidden>✦ ACȚIUNE RAPIDĂ</button>
+          <div class="mission-hint"><span>💡 CONCEPT</span><p id="missionHint">Git salvează doar ce alegi tu să pui într-un commit.</p></div>
+        </div>
+        <div class="mission-footer"><span id="missionMotivation">Fiecare comandă schimbă universul.</span><span id="score" class="xp">0 XP</span></div>
+      </aside>
+
+      <section class="card terminal-card" aria-label="Terminal simulat">
+        <div class="card-top terminal-top"><div><div class="overline">TERMINAL / SIMULATOR</div><h2>Command deck <span class="h2-small">/ BASH-ish</span></h2></div><div class="terminal-badges"><span class="fake-led green"></span> ENGINE READY <span class="bar-sep">·</span> <button class="link-btn" id="btnClear">CLEAR ↗</button></div></div>
+        <div class="terminal-screen" id="terminalScreen" role="log" aria-live="polite" aria-relevant="additions"></div>
+        <form id="terminalForm" autocomplete="off"><label for="commandInput"><span class="terminal-user">student@uso</span><span class="terminal-path">:~/git-lab</span><span class="terminal-dollar">$</span></label><input id="commandInput" spellcheck="false" autocapitalize="none" autocomplete="off" aria-label="Comandă Git" placeholder="tastează o comandă Git..."/><button class="terminal-enter" type="submit" title="Enter">↵</button></form>
+        <div class="terminal-footer"><span><kbd>ENTER</kbd> EXECUTĂ · <kbd>↑</kbd><kbd>↓</kbd> ISTORIC · <kbd>?</kbd> AJUTOR</span><span id="terminalState">READY_</span></div>
+      </section>
+
+      <aside class="card files-card" aria-label="Fișierele și staging area">
+        <div class="card-top compact"><div><div class="overline">THE THREE REALMS</div><h2>Unde sunt modificările?</h2></div><span class="state-live">● LIVE</span></div>
+        <div class="realm-row"><div class="realm-icon blue">✎</div><div class="realm-meta"><strong>01 / WORKING TREE</strong><small>Fișierele de pe disc</small></div><span class="count" id="workCount">0</span></div>
+        <div id="workFiles" class="file-pills"></div>
+        <div class="transfer-line"><span>git add ↓</span></div>
+        <div class="realm-row"><div class="realm-icon magenta">◈</div><div class="realm-meta"><strong>02 / STAGING AREA</strong><small>Ce intră în următorul commit</small></div><span class="count" id="stageCount">0</span></div>
+        <div id="stageFiles" class="file-pills"></div>
+        <div class="transfer-line"><span>git commit ↓</span></div>
+        <div class="realm-row"><div class="realm-icon lime">◆</div><div class="realm-meta"><strong>03 / LOCAL REPO</strong><small>Snapshot-uri în .git/</small></div><span class="count" id="localCount">0</span></div><div class="ref-box" id="localRef">main · no commits</div>
+        <div class="transfer-line"><span>git push ↓</span></div>
+        <div class="realm-row"><div class="realm-icon orange">◉</div><div class="realm-meta"><strong>04 / GITHUB (REMOTE)</strong><small>O copie distribuită</small></div><span class="count" id="remoteCount">0</span></div><div class="ref-box" id="remoteRef">origin/main · no commits</div>
+        <div class="file-editor"><div class="editor-head"><strong>✎ EDITOR RAPID</strong><button class="link-btn" id="btnNewFile">+ FILE</button></div><select id="fileSelect" aria-label="Selectează fișierul"></select><textarea id="fileContent" spellcheck="false" aria-label="Conținutul fișierului"></textarea><button class="btn outline full" id="btnSaveFile">SALVEAZĂ ÎN WORKING TREE ↗</button><p class="editor-note">Editarea aici este locală, în simulator. Nu scrie pe discul tău.</p></div>
+      </aside>
+
+      <section class="card remote-card" aria-label="Simulare GitHub și Pull Request">
+        <div class="card-top compact"><div><div class="overline">REMOTE OPERATIONS</div><h2>GitHub operations <span class="h2-small">/ SIMULAT</span></h2></div><div class="github-mark">◎</div></div>
+        <div class="pr-summary" id="prSummary"><div><span class="status-tag neutral" id="prStatus">NO PULL REQUEST</span><h3 id="prTitle">Ready for collaboration?</h3><p id="prMessage">Un branch publicat pe GitHub poate deveni Pull Request, cu review și merge.</p></div></div>
+        <div class="pr-actions"><button class="btn outline" id="btnCreatePR">＋ OPEN PR</button><button class="btn outline" id="btnApprovePR">✓ APPROVE</button><button class="btn bright" id="btnMergePR">⤵ MERGE PR</button></div>
+        <div class="ci-panel"><div class="ci-head"><span>⚡ SIMULATED CI CHECKS</span><button id="btnCI" class="link-btn">▶ RUN CHECKS</button></div><div id="ciChecks" class="ci-checks"><div><span class="check-icon">○</span><span>README presence</span><small>NOT RUN</small></div><div><span class="check-icon">○</span><span>Basic content check</span><small>NOT RUN</small></div></div><small class="ci-disclaimer">Bonus educațional: verificările sunt emulate, nu rulează GitHub Actions.</small></div>
+      </section>
+    </div>
+
+    <section class="bottom-insights"><article><div class="insight-icon">01</div><div><strong>Git ≠ GitHub</strong><p>Git = istoricul local. GitHub = platformă pentru repo-uri, PR-uri și colaborare.</p></div></article><article><div class="insight-icon">02</div><div><strong>Commit ≠ Push</strong><p>Un commit este local. Colegii îl văd după ce publici cu <code>git push</code>.</p></div></article><article><div class="insight-icon">03</div><div><strong>Branch ≠ Folder</strong><p>Un branch este o referință mobilă la un commit, nu o copie completă a proiectului.</p></div></article><article><div class="insight-icon">04</div><div><strong>PR ≠ Merge automat</strong><p>Un PR propune o schimbare; review-ul și integrarea sunt pași distincți.</p></div></article></section>
+    <footer><span>GIT//LAB 08 · MADE FOR USO · LOCAL SIMULATION</span><span>NU EXECUTĂ COMENZI PE SISTEM · NU NECESITĂ INTERNET</span><span>2026 // LEARN BY BREAKING THINGS</span></footer>
+  </main>
+</div>
+<div class="toast-container" id="toasts" aria-live="polite"></div>
+<dialog id="helpDialog" class="modal"><div class="modal-heading"><span class="eyebrow">COMMAND REFERENCE</span><button class="icon-btn" data-close="helpDialog" aria-label="Închide">✕</button></div><h2>Cheat codes for Git ✦</h2><p>Acesta este un <strong>simulator educațional</strong>. Comenzile sunt interpretate în browser; nu accesează sistemul de fișiere și nici GitHub real.</p><div class="help-grid" id="helpGrid"></div><div class="modal-bottom"><span>TIP: apasă ENTER în terminal, apoi folosește ↑ pentru istoricul comenzilor.</span><button class="btn primary" data-close="helpDialog">ÎNȚELES ✓</button></div></dialog>
+<dialog id="quizDialog" class="modal quiz-modal"><div class="modal-heading"><span class="eyebrow">BONUS STAGE · BOSS FIGHT</span><button class="icon-btn" data-close="quizDialog" aria-label="Închide">✕</button></div><div class="quiz-progress" id="quizProgress">QUESTION 01 / 05</div><h2 id="quizQuestion">Question</h2><div class="quiz-answers" id="quizAnswers"></div><div class="quiz-feedback" id="quizFeedback" aria-live="polite"></div><button class="btn primary" id="quizNext" disabled>URMĂTOAREA →</button></dialog>
+<script src="app.js" defer></script>
+</body>
+</html>
