@@ -22,3 +22,17 @@ jobs:
           for file in app.js arena.js join.js masterclass.js real-git.js; do
             node --check "$file"
           done
+
+  browser-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install browser test dependencies
+        run: |
+          python -m pip install pytest playwright
+          python -m playwright install --with-deps chromium
+      - name: Test offline Git simulator and multiplayer UI (3 browsers)
+        run: python -m pytest -q tests/test_demo.py tests/test_arena_browser.py
