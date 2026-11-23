@@ -8,7 +8,7 @@ import pytest
 from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).parents[1]))
-from live_quiz_server import QUESTIONS, start_server
+from live_quiz_server import QUESTIONS, start_server, normalize_public_url
 
 @pytest.fixture
 def arena():
@@ -136,3 +136,11 @@ def test_questions_validated():
         assert isinstance(q['correct'],int) and 0 <= q['correct'] < 4, i
         assert all(isinstance(x,str) and x.strip() for x in q['options']), i
         assert q['question'].strip() and q['explain'].strip(), i
+
+
+def test_public_url_for_hosting(monkeypatch):
+    monkeypatch.setenv('RENDER_EXTERNAL_HOSTNAME', 'uso-git-lab-arena.onrender.com')
+    assert normalize_public_url() == 'https://uso-git-lab-arena.onrender.com'
+    assert normalize_public_url('https://quiz.example.org///') == 'https://quiz.example.org'
+    monkeypatch.setenv('RENDER_EXTERNAL_HOSTNAME', 'evil.com/redirect')
+    assert normalize_public_url() == ''
