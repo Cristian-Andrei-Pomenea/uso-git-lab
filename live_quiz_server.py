@@ -280,9 +280,18 @@ def detect_ip():
     except OSError: return '127.0.0.1'
     finally:s.close()
 
+def normalize_public_url(explicit=''):
+    """Prefer an explicit URL, otherwise derive Render's trusted public hostname."""
+    if explicit:
+        return explicit.rstrip('/')
+    hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME', '')
+    if hostname and re.fullmatch(r'[a-zA-Z0-9.-]+', hostname) and hostname.endswith('.onrender.com'):
+        return 'https://' + hostname
+    return ''
+
 def start_server(host='0.0.0.0',port=8798,public_url=''):
     server=ArenaServer((host,port),Handler)
-    server.public_url=public_url.rstrip('/')
+    server.public_url=normalize_public_url(public_url)
     server.admin_key=os.environ.get('ARENA_ADMIN_KEY','')
     server.lan_ip=detect_ip()
     return server
@@ -298,7 +307,7 @@ def main():
     print('\n✦ GIT//LAB ARENA · ONLINE READY')
     print('PROFESOR (PC): http://127.0.0.1:%d/'%server.server_port)
     print('STUDENȚI (Wi-Fi comun): http://%s:%d/join'%(server.lan_ip,server.server_port))
-    if args.public_url:print('PUBLIC:',args.public_url)
+    if server.public_url:print('PUBLIC:',server.public_url)
     if server.admin_key:print('Remote host creation enabled with ARENA_ADMIN_KEY.')
     print('Game server ține datele doar în memorie. CTRL+C pentru oprire.\n')
     try:server.serve_forever(poll_interval=.25)
