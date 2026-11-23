@@ -1,0 +1,12 @@
+# Deploy via Render > New > Blueprint, selecting this GitHub repository.
+# Free instances can spin down and lose in-memory game sessions when idle.
+services:
+  - type: web
+    name: uso-git-lab-arena
+    runtime: docker
+    plan: free
+    region: frankfurt
+    healthCheckPath: /api/health
+    envVars:
+      - key: ARENA_ADMIN_KEY
+        generateValue: true
