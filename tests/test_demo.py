@@ -1,5 +1,6 @@
 """Browser smoke/regression tests for Git//LAB 08. Requires playwright and system chromium."""
 from pathlib import Path
+import os
 from playwright.sync_api import sync_playwright
 import pytest
 
@@ -8,7 +9,10 @@ HTML = (Path(__file__).parents[1] / 'GIT-LAB-08-OFFLINE.html').read_text()
 @pytest.fixture
 def demo():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True, executable_path='/usr/bin/chromium', args=['--no-sandbox', '--disable-dev-shm-usage'])
+        chromium = os.environ.get('CHROMIUM_BIN', '/usr/bin/chromium')
+        options = {'headless': True, 'args':['--no-sandbox', '--disable-dev-shm-usage']}
+        if Path(chromium).is_file(): options['executable_path'] = chromium
+        browser = p.chromium.launch(**options)
         page = browser.new_page(viewport={'width': 1500, 'height': 1000})
         errs = []
         page.on('pageerror', lambda error: errs.append(str(error)))
